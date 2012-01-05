@@ -1,5 +1,6 @@
 package org.openprovenance.prov;
 
+import java.io.FileReader;
 import java.net.URL;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class JSONValidator {
 
 	}
 
-	public List<String> validate(String file) throws Exception
+	public List<String> validate(String path, Boolean url) throws Exception
 	{
 		ObjectMapper mapper = new ObjectMapper();
 		JSONSchemaProvider schemaProvider = new JacksonSchemaProvider(mapper);
@@ -24,21 +25,30 @@ public class JSONValidator {
 				.getSchema(new URL(
 						"https://raw.github.com/trungdong/w3-prov/master/specs/json/prov-json-schema.js"));
 
-		return schema.validate(new URL(file));
+		List<String> errors;
+		if (url)
+		{
+			errors = schema.validate(new URL(path));
+		} else
+		{
+			errors = schema.validate(new FileReader(path));
+		}
+
+		return errors;
 	}
 
 	public static void main(String args[]) throws Exception
 	{
-		if (args.length != 1)
+		if (args.length != 2)
 		{
-			System.err.println("Usage: proval <url>");
+			System.err.println("Usage: proval -url|-file <url|file>");
 			System.exit(1);
 		}
 
 		try
 		{
 			JSONValidator validator = new JSONValidator();
-			List<String> errors = validator.validate(args[0]);
+			List<String> errors = validator.validate(args[1], (args[0].equals("-url")));
 			if (errors.size() == 0)
 			{
 				System.out.println("JSON is compliant with the PROV-JS Schema");
