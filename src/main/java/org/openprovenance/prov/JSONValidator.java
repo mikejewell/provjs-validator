@@ -48,7 +48,8 @@ public class JSONValidator {
 		try
 		{
 			JSONValidator validator = new JSONValidator();
-			List<String> errors = validator.validate(args[1], (args[0].equals("-url")));
+			List<String> errors = validator.validate(args[1],
+					(args[0].equals("-url")));
 			if (errors.size() == 0)
 			{
 				System.out.println("JSON is compliant with the PROV-JS Schema");

@@ -65,8 +65,8 @@ public class RhinoValidator {
 
 		Object json = getJSON(path, isURL);
 		Object schema = getJSON(
-				"schema/prov-json-schema.js",
-				false);
+				"https://raw.github.com/trungdong/w3-prov/master/specs/json/prov-json-schema.js",
+				true);
 
 		Global global = new Global();
 		Context cx = Context.enter();
@@ -77,6 +77,7 @@ public class RhinoValidator {
 			
 			// Remote module path:
 			// https://raw.github.com/garycourt/json-schema/master/lib/
+			// Using local here for speed.
 			
 			List<String> modulePaths = Arrays
 					.asList("lib/");
